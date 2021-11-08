@@ -1,0 +1,45 @@
+<?php
+  error_reporting(E_ALL ^ E_WARNING);
+  $REQUEST_METHOD = $_SERVER['REQUEST_METHOD'];
+        
+	if($REQUEST_METHOD == 'GET'){
+
+	}else if($REQUEST_METHOD == 'POST'){
+		$title = $_POST['title'];
+		$content = $_POST['content'];
+    
+    if(empty($title))
+    {
+    }
+    else if (empty($content))
+    {
+    }
+    else
+    {
+      include "util.php";
+  		$path = "articles/";
+      $title = Replace_Special_Char($title);      
+  		$file_name = $path.$title;
+      
+  		$fd = fopen($file_name, "w");
+  		if($fd == false){
+  		  echo <<< EOT
+<script type="text/javascript">window.alert("添加失败");</script>;
+EOT;
+      }else{
+        $order   = array("\r\n", "\n", "\r");   
+        $replace = ' ';
+        $content = str_replace($order, $replace, $content);
+        $content = str_replace(". ", ".\r\n", $content);
+        $content = Replace_Special_Char($content);
+        fwrite($fd,$content);      
+        fclose($fd);
+        echo <<< EOT
+<script type="text/javascript">window.alert("添加成功");</script>;
+EOT;
+      }
+    }
+  }
+  //Redirect to new_article.php
+  header("Location: ./new_article.php");
+?>
